@@ -1,5 +1,5 @@
 {
-  "name": "my-turborepo",
+  "name": "mono-stack",
   "private": true,
   "scripts": {
     "build": "turbo build",
