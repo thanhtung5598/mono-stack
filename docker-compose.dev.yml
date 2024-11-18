@@ -1,0 +1,29 @@
+version: "3"
+services:
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: "monostack"
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: "admin"
+      # You can use whatever password you like
+      MYSQL_PASSWORD: "root"
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: "root"
+      # Good for testing, but not production
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - mysql:/data/mysql
+
+networks:
+  app-networl:
+    driver: bridge
+
+volumes:
+  mysql: # data volumn
