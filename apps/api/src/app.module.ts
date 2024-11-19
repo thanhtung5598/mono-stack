@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SharedModule } from './libs/shared/shared.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { SharedModule } from './libs/shared/shared.module';
       isGlobal: true,
     }),
     SharedModule,
+    UserModule,
   ],
   controllers: [],
   providers: [],
