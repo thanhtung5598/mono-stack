@@ -41,7 +41,7 @@ jobs:
         id: build-backend
         if: steps.backend-check.outputs.backend == 'true'
         run: |
-          docker build -f Dockerfile.API \
+          docker build -f Dockerfile.Api \
             --build-arg NODE_ENV=${{ env.BE_NODE_ENV }} \
             --build-arg NODE_PORT=${{ env.BE_NODE_PORT }} \
             --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
