@@ -1,10 +1,10 @@
 FROM node:latest AS base
 
 # START_ENV
-ARG NODE_PORT=4000
-ARG DATABASE_URL="mysql://root:root@localhost:3306/monostack"
+ARG API_PORT=3001
+ARG DATABASE_URL="mysql://root@host.docker.internal:3306/monostack"
 
-ENV NODE_PORT=${NODE_PORT}
+ENV API_PORT=${API_PORT}
 ENV DATABASE_URL=${DATABASE_URL}
 # END_ENV
 
@@ -37,7 +37,7 @@ COPY --from=builder /app /app-runner
 
 ENV NODE_ENV=production
 
-EXPOSE ${NODE_PORT}
+EXPOSE ${API_PORT}
 
 CMD ["node", "apps/api/dist/main"]
 
