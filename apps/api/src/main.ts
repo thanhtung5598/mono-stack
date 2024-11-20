@@ -8,7 +8,6 @@ async function bootstrap() {
     .setTitle('Mono Stack')
     .addBearerAuth()
     .build();
-  console.log('test');
 
   const document = SwaggerModule.createDocument(app, config);
 
