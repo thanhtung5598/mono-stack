@@ -13,6 +13,7 @@ env:
   BE_IMAGE: be-monostack
   BE_DOMAIN: integrate-api
   BE_NGINX_FILE: integrate-api.conf
+  DATABASE_URL: mysql://root:MyStr0ngP@ssw0rd!@host.docker.internal:3306/monostack
   # Network
   NETWORK_NAME: monostack-network
 
@@ -44,7 +45,7 @@ jobs:
           sudo docker build -f Dockerfile.Api \
             --build-arg NODE_ENV=${{ env.BE_NODE_ENV }} \
             --build-arg NODE_PORT=${{ env.BE_NODE_PORT }} \
-            --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
             -t ${{ env.BE_IMAGE }} .
 
       - name: Deploy Backend
