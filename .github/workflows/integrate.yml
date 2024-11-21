@@ -25,7 +25,7 @@ jobs:
        # Ensure the Docker network exists
       - name: Create Docker network
         run: |
-         sudo docker network inspect ${{ env.NETWORK_NAME }} || docker network create ${{ env.NETWORK_NAME }}
+         sudo docker network inspect ${{ env.NETWORK_NAME }} || sudo docker network create ${{ env.NETWORK_NAME }}
 
       # Backend Deployment
       - name: Check Backend Files Changed
@@ -41,7 +41,7 @@ jobs:
         id: build-backend
         if: steps.backend-check.outputs.backend == 'true'
         run: |
-          docker build -f Dockerfile.Api \
+          sudo docker build -f Dockerfile.Api \
             --build-arg NODE_ENV=${{ env.BE_NODE_ENV }} \
             --build-arg NODE_PORT=${{ env.BE_NODE_PORT }} \
             --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} \
@@ -50,10 +50,10 @@ jobs:
       - name: Deploy Backend
         if: steps.backend-check.outputs.backend == 'true'
         run: |
-          docker run --rm ${{ env.BE_IMAGE }} npx turbo db:deploy
-          docker stop ${{ env.BE_IMAGE }} || true
-          docker rm ${{ env.BE_IMAGE }} || true
-          docker run --name ${{ env.BE_IMAGE }} --detach --restart=unless-stopped \
+          sudo docker run --rm ${{ env.BE_IMAGE }} npx turbo db:deploy
+          sudo docker stop ${{ env.BE_IMAGE }} || true
+          sudo docker rm ${{ env.BE_IMAGE }} || true
+          sudo docker run --name ${{ env.BE_IMAGE }} --detach --restart=unless-stopped \
             --publish ${{ env.BE_EXPOSED_PORT }}:${{ env.BE_NODE_PORT }} \
             --network ${{ env.NETWORK_NAME }} \
             ${{ env.BE_IMAGE }}
