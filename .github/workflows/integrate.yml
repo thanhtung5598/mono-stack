@@ -25,7 +25,7 @@ jobs:
        # Ensure the Docker network exists
       - name: Create Docker network
         run: |
-         docker network inspect ${{ env.NETWORK_NAME }} || docker network create ${{ env.NETWORK_NAME }}
+         sudo docker network inspect ${{ env.NETWORK_NAME }} || docker network create ${{ env.NETWORK_NAME }}
 
       # Backend Deployment
       - name: Check Backend Files Changed
