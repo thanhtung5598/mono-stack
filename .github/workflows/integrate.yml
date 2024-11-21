@@ -13,7 +13,6 @@ env:
   BE_IMAGE: be-monostack
   BE_DOMAIN: integrate-api
   BE_NGINX_FILE: integrate-api.conf
-  DATABASE_URL: mysql://root@host.docker.internal:3306/monostack
   # Network
   NETWORK_NAME: monostack-network
 
