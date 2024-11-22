@@ -12,9 +12,8 @@ env:
   BE_EXPOSED_PORT: 4001
   BE_IMAGE: be-monostack
   BE_DOMAIN: monostack-api
-  BE_NGINX_FILE:
-    monostack-api.conf
-    # Frontend Environment Variables
+  BE_NGINX_FILE: monostack-api.conf
+  # Frontend Environment Variables
   FE_ENV: production
   FE_PORT: 3000
   FE_EXPOSED_PORT: 4000
