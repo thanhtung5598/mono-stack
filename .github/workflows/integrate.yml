@@ -7,20 +7,20 @@ on:
 
 env:
   # Backend Environment Variables
-  BE_NODE_ENV: production
-  BE_NODE_PORT: 3001
-  BE_EXPOSED_PORT: 4000
+  BE_ENV: production
+  BE_PORT: 3001
+  BE_EXPOSED_PORT: 4001
   BE_IMAGE: be-monostack
-  BE_DOMAIN: integrate-api
-  BE_NGINX_FILE: integrate-api.conf
-  DATABASE_URL: mysql://root:MyStr0ngP@ssw0rd!@host.docker.internal:3306/monostack
-   # Frontend Environment Variables
-  FE_NODE_ENV: production
+  BE_DOMAIN: monostack-api
+  BE_NGINX_FILE:
+    monostack-api.conf
+    # Frontend Environment Variables
+  FE_ENV: production
   FE_PORT: 3000
-  FE_EXPOSED_PORT: 4001
+  FE_EXPOSED_PORT: 4000
   FE_IMAGE: fe-monostack
-  FE_DOMAIN: integrate-web
-  FE_NGINX_FILE: integrate-web.conf
+  FE_DOMAIN: monostack-web
+  FE_NGINX_FILE: monostack-web.conf
   # Network
   NETWORK_NAME: monostack-network
 
@@ -30,47 +30,45 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-       # Ensure the Docker network exists
+        # Ensure the Docker network exists
       - name: Create Docker network
         run: |
-         sudo docker network inspect ${{ env.NETWORK_NAME }} || sudo docker network create ${{ env.NETWORK_NAME }}
+          sudo docker network inspect ${{ env.NETWORK_NAME }} || sudo docker network create ${{ env.NETWORK_NAME }}
 
-      # Backend Deployment
-      - name: Check Backend Files Changed
-        id: backend-check
+      # Frontend Deployment
+      - name: Check Frontend Files Changed
+        id: frontend-check
         uses: dorny/paths-filter@v3
         with:
           filters: |
-            backend:
-              - 'apps/api/**'
-              - 'packages/database/**'
+            frontend:
+              - 'apps/web/**'
 
-      - name: Build be image
-        id: build-backend
-        if: steps.backend-check.outputs.backend == 'true'
+      - name: Build Frontend Image
+        id: build-frontend
+        if: steps.frontend-check.outputs.frontend == 'true'
         run: |
-          sudo docker build -f Dockerfile.Api \
-            --build-arg NODE_ENV=${{ env.BE_NODE_ENV }} \
-            --build-arg NODE_PORT=${{ env.BE_NODE_PORT }} \
-            --build-arg DATABASE_URL=${{ env.DATABASE_URL }} \
-            -t ${{ env.BE_IMAGE }} .
+          sudo docker build -f Dockerfile.Web \
+            --build-arg NODE_ENV=${{ env.FE_ENV }} \
+            --build-arg FE_PORT=${{ env.FE_PORT }} \
+            -t ${{ env.FE_IMAGE }} .
 
-      - name: Deploy Backend
-        if: steps.backend-check.outputs.backend == 'true'
+      - name: Deploy Frontend
+        if: steps.frontend-check.outputs.frontend == 'true'
         run: |
-          sudo docker run --rm ${{ env.BE_IMAGE }} npx turbo db:deploy
-          sudo docker stop ${{ env.BE_IMAGE }} || true
-          sudo docker rm ${{ env.BE_IMAGE }} || true
-          sudo docker run --name ${{ env.BE_IMAGE }} --detach --restart=unless-stopped \
-            --publish ${{ env.BE_EXPOSED_PORT }}:${{ env.BE_NODE_PORT }} \
+          sudo docker stop ${{ env.FE_IMAGE }} || true
+          sudo docker rm ${{ env.FE_IMAGE }} || true
+          sudo docker run --name ${{ env.FE_IMAGE }} --detach --restart=unless-stopped \
+            --publish ${{ env.FE_EXPOSED_PORT }}:${{ env.FE_PORT }} \
             --network ${{ env.NETWORK_NAME }} \
-            ${{ env.BE_IMAGE }}
+            ${{ env.FE_IMAGE }}
 
-      - name: Configure Backend Nginx
-        if: steps.backend-check.outputs.backend == 'true'
+      - name: Configure Frontend Nginx
+        if: steps.frontend-check.outputs.frontend == 'true'
         run: |
-          sudo cp -n ./.nginx/backend.conf /etc/nginx/conf.d/${{ env.BE_NGINX_FILE }}
-          sudo sed -i 's/CHANGE_PORT/${{ env.BE_EXPOSED_PORT }}/g' /etc/nginx/conf.d/${{ env.BE_NGINX_FILE }}
+          sudo cp -n ./.nginx/frontend.conf /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
+          sudo sed -i 's/CHANGE_SRV_NAME/${{ env.FE_DOMAIN }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
+          sudo sed -i 's/CHANGE_PORT/${{ env.FE_EXPOSED_PORT }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
 
       - name: Restart nginx
         run: sudo nginx -s reload
