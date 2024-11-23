@@ -15,7 +15,7 @@ env:
   BE_NGINX_FILE: monostack-api.conf
   # Frontend Environment Variables
   FE_ENV: production
-  FE_PORT: 3000
+  # FE_PORT: 3000
   # FE_EXPOSED_PORT: 4000
   FE_IMAGE: fe-monostack
   FE_DOMAIN: monostack-web
@@ -48,8 +48,8 @@ jobs:
         if: steps.frontend-check.outputs.frontend == 'true'
         run: |
           sudo docker build -f Dockerfile.Web \
-            --build-arg NODE_ENV=${{ env.FE_ENV }} \
-            --build-arg FE_PORT=${{ env.FE_PORT }} \
+            --build-arg FE_ENV=${{ env.FE_ENV }} \
+            --build-arg FE_PORT=${{ secrets.FE_PORT }} \
             -t ${{ env.FE_IMAGE }} .
 
       - name: Deploy Frontend
@@ -58,7 +58,7 @@ jobs:
           sudo docker stop ${{ env.FE_IMAGE }} || true
           sudo docker rm ${{ env.FE_IMAGE }} || true
           sudo docker run --name ${{ env.FE_IMAGE }} --detach --restart=unless-stopped \
-            --publish ${{ secrets.FE_EXPOSED_PORT }}:${{ env.FE_PORT }} \
+            --publish ${{ secrets.FE_EXPOSED_PORT }}:${{ secrets.FE_PORT }} \
             --network ${{ env.NETWORK_NAME }} \
             ${{ env.FE_IMAGE }}
 
