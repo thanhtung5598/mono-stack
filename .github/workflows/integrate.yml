@@ -16,7 +16,7 @@ env:
   # Frontend Environment Variables
   FE_ENV: production
   FE_PORT: 3000
-  FE_EXPOSED_PORT: 4000
+  # FE_EXPOSED_PORT: 4000
   FE_IMAGE: fe-monostack
   FE_DOMAIN: monostack-web
   FE_NGINX_FILE: monostack-web.conf
@@ -58,7 +58,7 @@ jobs:
           sudo docker stop ${{ env.FE_IMAGE }} || true
           sudo docker rm ${{ env.FE_IMAGE }} || true
           sudo docker run --name ${{ env.FE_IMAGE }} --detach --restart=unless-stopped \
-            --publish ${{ env.FE_EXPOSED_PORT }}:${{ env.FE_PORT }} \
+            --publish ${{ secrets.FE_EXPOSED_PORT }}:${{ env.FE_PORT }} \
             --network ${{ env.NETWORK_NAME }} \
             ${{ env.FE_IMAGE }}
 
@@ -67,7 +67,7 @@ jobs:
         run: |
           sudo cp -n ./.nginx/frontend.conf /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
           sudo sed -i 's/CHANGE_SRV_NAME/${{ env.FE_DOMAIN }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
-          sudo sed -i 's/CHANGE_PORT/${{ env.FE_EXPOSED_PORT }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
+          sudo sed -i 's/CHANGE_PORT/${{ secrets.FE_EXPOSED_PORT }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
 
       - name: Restart nginx
         run: sudo nginx -s reload
