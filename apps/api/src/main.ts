@@ -8,11 +8,14 @@ async function bootstrap() {
     .setTitle('Mono Stack')
     .addBearerAuth()
     .build();
+  console.log('test mew');
 
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup(`api/docs`, app, document);
 
-  await app.listen(process.env.API_PORT ?? 3001);
+  app.enableCors();
+
+  await app.listen(process.env.NODE_PORT ?? 3001);
 }
 bootstrap();
