@@ -1,0 +1,53 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/mono-stack-task:1",
+  "containerDefinitions": [
+    {
+      "name": "mono-stack-web",
+      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-web",
+      "cpu": 0,
+      "portMappings": [
+        {
+          "name": "mono-stack-web-3000-tcp",
+          "containerPort": 3000,
+          "hostPort": 4000,
+          "protocol": "tcp",
+          "appProtocol": "http"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "environmentFiles": [],
+      "mountPoints": [],
+      "volumesFrom": [],
+      "ulimits": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/mono-stack-task",
+          "awslogs-region": "ap-southeast-1",
+          "awslogs-stream-prefix": "ecs"
+        },
+        "secretOptions": []
+      },
+      "systemControls": []
+    }
+  ],
+  "family": "mono-stack-task",
+  "taskRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "revision": 1,
+  "volumes": [],
+  "status": "ACTIVE",
+  "placementConstraints": [],
+  "requiresCompatibilities": ["EXTERNAL"],
+  "cpu": "1024",
+  "memory": "3072",
+  "runtimePlatform": {
+    "cpuArchitecture": "X86_64",
+    "operatingSystemFamily": "LINUX"
+  },
+  "registeredAt": "2024-11-25T04:41:56.169Z",
+  "registeredBy": "arn:aws:iam::739275471493:root",
+  "tags": []
+}
