@@ -9,6 +9,8 @@ env:
   AWS_REGION: ap-southeast-1
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
   WEB_IMAGE: fe-monostack
+  FE_ENV: production
+  FE_PORT: ${{ secrets.FE_PORT }}
 
 permissions:
   contents: read

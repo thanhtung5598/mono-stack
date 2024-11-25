@@ -25,7 +25,7 @@ runs:
       run: |
         docker build -f Dockerfile.Web \
         --build-arg FE_ENV=$FE_ENV \
-        --build-arg FE_PORT=${{ secrets.FE_PORT }} \
+        --build-arg FE_PORT=$FE_PORT \
         -t ${{ inputs.image }} .
 
     - name: Push Web
