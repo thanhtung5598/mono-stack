@@ -23,7 +23,7 @@ runs:
       env:
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        docker build -f Dockerfile.Web \
+        sudo docker build -f Dockerfile.Web \
         --build-arg FE_ENV=$FE_ENV \
         --build-arg FE_PORT=$FE_PORT \
         -t ${{ inputs.image }} .
