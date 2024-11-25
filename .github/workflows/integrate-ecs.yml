@@ -8,6 +8,7 @@ on:
 env:
   AWS_REGION: ap-southeast-1
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
+  WEB_IMAGE: fe-monostack
 
 permissions:
   contents: read
@@ -30,3 +31,18 @@ jobs:
 
       - name: Login to Amazon ECR
         run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+
+  build-web:
+    name: Build Web
+    runs-on: self-hosted
+    outputs:
+      image: ${{ steps.build-build-web.outputs.image }}
+    needs: [aws-config]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Web
+        id: build-web
+        uses: ./.github/actions/build-web
+        with:
+          image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
+          deploy_env: integrate
