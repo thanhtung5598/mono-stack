@@ -49,17 +49,17 @@ jobs:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
           deploy_env: integrate-ecs
 
-  deploy:
-    name: Deploy to ECS
-    runs-on: self-hosted
-    needs: [aws-config, build-web]
-    steps:
-      - uses: actions/checkout@v2
+  # deploy:
+  #   name: Deploy to ECS
+  #   runs-on: self-hosted
+  #   needs: [aws-config, build-web]
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      - name: Fill in the new image ID for web container
-        id: web-task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
-        with:
-          task-definition: ${{ steps.api-task-def.outputs.task-definition }}
-          container-name: ${{ env.WEB_CONTAINER_NAME }}
-          image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
+  #     - name: Fill in the new image ID for web container
+  #       id: web-task-def
+  #       uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+  #       with:
+  #         task-definition: ${{ steps.api-task-def.outputs.task-definition }}
+  #         container-name: ${{ env.WEB_CONTAINER_NAME }}
+  #         image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
