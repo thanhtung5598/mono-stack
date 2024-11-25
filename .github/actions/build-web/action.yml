@@ -14,7 +14,7 @@ runs:
     - name: Echo all environment variable to apps/web
       shell: bash
       run: |
-        printenv | grep -E '^(FE_ENV)' >> apps/web/.env
+        printenv | grep -E '^(FE_ENV|FE_PORT)' >> apps/web/.env
         cat apps/web/.env
 
     - name: Build Web
@@ -25,6 +25,7 @@ runs:
       run: |
         docker build -f Dockerfile.Web \
         --build-arg FE_ENV=$FE_ENV \
+        --build-arg FE_PORT=${{ secrets.FE_PORT }} \
         -t ${{ inputs.image }} .
 
     - name: Push Web
