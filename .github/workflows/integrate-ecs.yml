@@ -7,11 +7,7 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  ECS_SERVICE: mono-stack
-  ECS_CLUSTER: Mono-stack
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
-  ECS_TASK_DEFINITION: ../../.aws/task-definition.json
-  WEB_CONTAINER_NAME: mono-stack-web-integrate
 
 permissions:
   contents: read
