@@ -26,6 +26,7 @@ jobs:
   build-web:
     name: Build Web
     runs-on: self-hosted
+    timeout-minutes: 5
     outputs:
       image: ${{ steps.build-web.outputs.image }}
     steps:
