@@ -53,6 +53,7 @@ jobs:
         uses: ./.github/actions/build-web
         with:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
+          deploy_env: integrate-ecs
 
   deploy:
     name: Deploy to ECS
