@@ -1,21 +1,17 @@
-name: "Build Web composite action"
-description: "Builds a Web image and pushes to registry"
+name: 'Build Web composite action'
+description: 'An example composite action that builds an Web image'
 inputs:
   image:
-    description: "Web Image Name"
+    description: 'Web Image Name'
     required: true
   push:
-    description: "Push the image to the registry"
+    description: 'Push the image to the registry'
     required: false
-    default: "true"
-outputs:
-  image:
-    description: "The built image name"
-    value: ${{ inputs.image }}
+    default: 'true'
 runs:
   using: "composite"
   steps:
-    - name: Echo all environment variables to .env
+    - name: Echo all environment variable to apps/web
       shell: bash
       run: |
         printenv | grep -E '^(FE_ENV|FE_PORT)' >> apps/web/.env
@@ -31,7 +27,7 @@ runs:
         --build-arg FE_ENV=$FE_ENV \
         --build-arg FE_PORT=$FE_PORT \
         -t ${{ inputs.image }} .
-
+    
     - name: Set image output
       shell: bash
       run: echo "image=${{ inputs.image }}" >> $GITHUB_ENV
