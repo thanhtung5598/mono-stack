@@ -7,9 +7,9 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
-  ECS_TASK_DEFINITION: task-definition.json
-  WEB_CONTAINER_NAME: mono-stack-integrate
-  ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
+  ECS_TASK_DEFINITION: task-mono-stack.json
+  WEB_CONTAINER_NAME: mono-stack-ecr
+  # ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
   WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr
   ECS_CLUSTER: cluster-mono-stack
   ECS_SERVICE: service-mono-stack
@@ -34,7 +34,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        with:
+          mask-password: "true"
 
   build-web:
     name: Build Web
@@ -49,7 +52,6 @@ jobs:
         uses: ./.github/actions/build-web
         with:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
-          deploy_env: integrate-ecs
 
   deploy:
     name: Deploy to ECS
@@ -60,17 +62,16 @@ jobs:
 
       - name: Fill in the new image ID for web container
         id: web-task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.WEB_CONTAINER_NAME }}
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
-        
+
       - name: Deploy to Amazon ECS service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.web-task-def.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
-
-  
+          wait-for-service-stability: true
