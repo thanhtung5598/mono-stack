@@ -31,4 +31,4 @@ runs:
     - name: Push Web
       if: ${{ inputs.push == 'true' }}
       shell: bash
-      run: docker push ${{ inputs.image }}
+      run: sudo docker push ${{ inputs.image }}
