@@ -3,13 +3,10 @@ name: Deploy to Amazon ECS
 on:
   push:
     branches:
-      - integrate-ecs
+      - integrate-ecs-remove
 
 env:
   AWS_REGION: ap-southeast-1
-  AWS_DEPLOY_ACCESS_KEY_ID: ${{ secrets.AWS_DEPLOY_ACCESS_KEY_ID }}
-  AWS_DEPLOY_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEPLOY_SECRET_ACCESS_KEY }}
-  ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
   ECS_TASK_DEFINITION: task-mono-stack.json
   WEB_CONTAINER_NAME: mono-stack-ecr
   WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr
@@ -17,34 +14,51 @@ env:
   ECS_SERVICE: service-mono-stack
   FE_ENV: production
   FE_PORT: ${{ secrets.FE_PORT }}
+  # ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
+  aws-config:
+    name: Configure AWS credentials
+    runs-on: self-hosted
+    steps:
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_DEPLOY_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_DEPLOY_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR manually
+        run: |
+          aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.WEB_IMAGE }}
+
   build-web:
     name: Build Web
     runs-on: self-hosted
     outputs:
       image: ${{ steps.build-web.outputs.image }}
+    needs: [aws-config]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Configure AWS credentials
-        uses: ./.github/actions/aws-config
-
+      - uses: actions/checkout@v2
       - name: Build Web
         id: build-web
         uses: ./.github/actions/build-web
         with:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
+          deploy_env: integrate-ecs-remove
 
   deploy:
     name: Deploy to ECS
     runs-on: self-hosted
-    needs: [build-web]
+    needs: [build-web, aws-config]
     steps:
       - uses: actions/checkout@v2
 
