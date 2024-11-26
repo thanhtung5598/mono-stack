@@ -9,10 +9,12 @@ env:
   AWS_REGION: ap-southeast-1
   ECS_TASK_DEFINITION: task-mono-stack.json
   WEB_CONTAINER_NAME: mono-stack-ecr
-  # ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
   WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr
   ECS_CLUSTER: cluster-mono-stack
   ECS_SERVICE: service-mono-stack
+  FE_ENV: production
+  FE_PORT: ${{ secrets.FE_PORT }}
+  # ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
 
 permissions:
   contents: read
