@@ -16,8 +16,9 @@ env:
   FE_PORT: ${{ secrets.FE_PORT }}
   # ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
 
-permissions:
-  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   aws-config:
