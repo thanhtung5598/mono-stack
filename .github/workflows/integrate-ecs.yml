@@ -7,10 +7,12 @@ on:
 
 env:
   AWS_REGION: ap-southeast-1
+  ECS_TASK_DEFINITION: task-definition.json
+  WEB_CONTAINER_NAME: mono-stack-integrate
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
-  WEB_IMAGE: fe-monostack-ecs
-  FE_ENV: production
-  FE_PORT: ${{ secrets.FE_PORT }}
+  WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr
+  ECS_CLUSTER: cluster-mono-stack
+  ECS_SERVICE: service-mono-stack
 
 permissions:
   contents: read
@@ -38,7 +40,7 @@ jobs:
     name: Build Web
     runs-on: self-hosted
     outputs:
-      image: ${{ steps.build-build-web.outputs.image }}
+      image: ${{ steps.build-web.outputs.image }}
     needs: [aws-config]
     steps:
       - uses: actions/checkout@v2
@@ -48,3 +50,27 @@ jobs:
         with:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
           deploy_env: integrate-ecs
+
+  deploy:
+    name: Deploy to ECS
+    runs-on: self-hosted
+    needs: [build-web, aws-config]
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fill in the new image ID for web container
+        id: web-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@c804dfbdd57f713b6c079302a4c01db7017a36fc
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.WEB_CONTAINER_NAME }}
+          image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
+        
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.web-task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+
+  

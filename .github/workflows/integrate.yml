@@ -30,11 +30,11 @@ jobs:
       - uses: actions/checkout@v2
 
         # Ensure the Docker network exists
-      - name: Create Docker network
+      - name: Create Docker Network
         run: |
           sudo docker network inspect ${{ env.NETWORK_NAME }} || sudo docker network create ${{ env.NETWORK_NAME }}
 
-      # Frontend Deployment
+        # Frontend Deployment
       - name: Check Frontend Files Changed
         id: frontend-check
         uses: dorny/paths-filter@v3
@@ -50,7 +50,7 @@ jobs:
           sudo docker build -f Dockerfile.Web \
             --build-arg FE_ENV=${{ env.FE_ENV }} \
             --build-arg FE_PORT=${{ secrets.FE_PORT }} \
-            -t ${{ env.FE_IMAGE }} .
+            -t ${{ env.FE_IMAGE }} . || exit 1
 
       - name: Deploy Frontend
         if: steps.frontend-check.outputs.frontend == 'true'
@@ -62,12 +62,20 @@ jobs:
             --network ${{ env.NETWORK_NAME }} \
             ${{ env.FE_IMAGE }}
 
+      - name: Backup Existing Frontend Nginx Config
+        if: steps.frontend-check.outputs.frontend == 'true'
+        run: sudo cp /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }} /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}.bak || true
+
       - name: Configure Frontend Nginx
         if: steps.frontend-check.outputs.frontend == 'true'
         run: |
           sudo cp -n ./.nginx/frontend.conf /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
           sudo sed -i 's/CHANGE_SRV_NAME/${{ env.FE_DOMAIN }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
           sudo sed -i 's/CHANGE_PORT/${{ secrets.FE_EXPOSED_PORT }}/g' /etc/nginx/conf.d/${{ env.FE_NGINX_FILE }}
+
+      - name: Test Nginx Configuration
+        if: steps.frontend-check.outputs.frontend == 'true'
+        run: sudo nginx -t
 
       - name: Restart nginx
         run: sudo nginx -s reload
