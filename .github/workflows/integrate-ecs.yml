@@ -79,6 +79,11 @@ jobs:
           container-name: ${{ env.WEB_CONTAINER_NAME }}
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
 
+      - name: Run migration
+        run: |
+          docker run --rm ${{ env.WEB_IMAGE }}:${{ github.sha }}
+          docker run --rm ${{ env.WEB_IMAGE }}:${{ github.sha }}
+
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
