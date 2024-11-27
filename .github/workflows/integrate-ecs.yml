@@ -26,6 +26,7 @@ jobs:
   build-web:
     name: Build Web
     continue-on-error: true
+    timeout-minutes: 12
     runs-on: self-hosted
     outputs:
       image: ${{ steps.build-web.outputs.image }}
@@ -46,7 +47,6 @@ jobs:
         uses: ./.github/actions/build-web
         with:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
-          deploy_env: integrate-ecs
 
   deploy:
     name: Deploy to ECS
@@ -62,7 +62,7 @@ jobs:
           aws-access-key-id: ${{ env.AWS_DEPLOY_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          web-image: ${{ env.ECR_REGISTRY }}
+          ecr-registry: ${{ env.ECR_REGISTRY }}
 
       - name: Fill in the new image ID for web container
         id: web-task-def

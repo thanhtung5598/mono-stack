@@ -8,6 +8,7 @@ inputs:
     description: 'Push the image to the registry'
     required: false
     default: 'true'
+
 runs:
   using: "composite"
   steps:
