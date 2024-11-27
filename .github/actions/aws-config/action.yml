@@ -33,4 +33,4 @@ runs:
     - name: Login to Amazon ECR manually
       shell: bash
       run: |
-        aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.web-image }}
+        aws ecr get-login-password --region ${{ inputs.aws-region }} | sudo docker login --username AWS --password-stdin ${{ inputs.web-image }}
