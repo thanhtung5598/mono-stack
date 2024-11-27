@@ -26,7 +26,7 @@ jobs:
   build-web:
     name: Build Web
     continue-on-error: true
-    timeout-minutes: 12
+    timeout-minutes: 10
     runs-on: self-hosted
     outputs:
       image: ${{ steps.build-web.outputs.image }}
@@ -48,10 +48,17 @@ jobs:
         with:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
 
+      - name: Ensure Build Web Success
+        if: ${{ failure() }}
+        run: |
+          echo "Build Web failed. Exiting workflow."
+          exit 1
+
   deploy:
     name: Deploy to ECS
     runs-on: self-hosted
     needs: [build-web]
+    if: ${{ success() }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
