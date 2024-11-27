@@ -80,10 +80,9 @@ jobs:
           image: "${{ env.WEB_IMAGE }}:${{ github.sha }}"
 
       - name: Run migration
-        run: |
-          docker run --rm ${{ env.WEB_IMAGE }}:${{ github.sha }}
-          docker run --rm ${{ env.WEB_IMAGE }}:${{ github.sha }}
-
+        run: docker run --rm ${{ env.WEB_IMAGE }}:${{ github.sha }} --verbose
+        continue-on-error: true
+        
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
