@@ -39,7 +39,7 @@ jobs:
           aws-access-key-id: ${{ env.AWS_DEPLOY_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          web-image: ${{ env.WEB_IMAGE }}
+          ecr-registry: ${{ env.ECR_REGISTRY }}
 
       - name: Build Web
         id: build-web
@@ -62,7 +62,7 @@ jobs:
           aws-access-key-id: ${{ env.AWS_DEPLOY_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_DEPLOY_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
-          web-image: ${{ env.WEB_IMAGE }}
+          web-image: ${{ env.ECR_REGISTRY }}
 
       - name: Fill in the new image ID for web container
         id: web-task-def
