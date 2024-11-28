@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "mono-stack-ecr",
-      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr",
+      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr:latest",
       "cpu": 0,
       "portMappings": [
         {
