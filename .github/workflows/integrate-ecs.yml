@@ -25,8 +25,6 @@ concurrency:
 jobs:
   build-web:
     name: Build Web
-    continue-on-error: true
-    timeout-minutes: 8
     runs-on: self-hosted
     outputs:
       image: ${{ steps.build-web.outputs.image }}
