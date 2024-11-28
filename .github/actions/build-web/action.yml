@@ -1,13 +1,13 @@
-name: 'Build Web composite action'
-description: 'An example composite action that builds an Web image'
+name: "Build Web composite action"
+description: "An example composite action that builds an Web image"
 inputs:
   image:
-    description: 'Web Image Name'
+    description: "Web Image Name"
     required: true
   push:
-    description: 'Push the image to the registry'
+    description: "Push the image to the registry"
     required: false
-    default: 'true'
+    default: "true"
 
 runs:
   using: "composite"
@@ -18,41 +18,15 @@ runs:
         printenv | grep -E '^(FE_ENV|FE_PORT)' >> apps/web/.env
         cat apps/web/.env
 
-    - name: Stop and remove running containers using the old Web image
-      shell: bash
-      run: |
-        CONTAINER_IDS=$(sudo docker ps -q --filter ancestor=${{ inputs.image }})
-        if [ -n "$CONTAINER_IDS" ]; then
-          echo "Stopping containers using image: ${{ inputs.image }}"
-          sudo docker stop $CONTAINER_IDS
-          echo "Removing containers using image: ${{ inputs.image }}"
-          sudo docker rm $CONTAINER_IDS
-        else
-          echo "No running containers found for image: ${{ inputs.image }}"
-        fi
-
-    - name: Remove old Web image if exists
-      shell: bash
-      run: |
-        if sudo docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "^${{ inputs.image }}$"; then
-          echo "Removing old image: ${{ inputs.image }}"
-          sudo docker rmi -f ${{ inputs.image }}
-        else
-          echo "No old image found for: ${{ inputs.image }}"
-        fi
-
-
     - name: Build Web
       id: build-web
       shell: bash
-      env:
-        IMAGE_TAG: ${{ github.sha }}
       run: |
         sudo docker build -f Dockerfile.Web \
         --build-arg FE_ENV=$FE_ENV \
         --build-arg FE_PORT=$FE_PORT \
         -t ${{ inputs.image }} .
-    
+
     - name: Set image output
       shell: bash
       run: echo "image=${{ inputs.image }}" >> $GITHUB_ENV

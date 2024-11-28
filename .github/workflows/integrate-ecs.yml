@@ -12,7 +12,7 @@ env:
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
   ECS_TASK_DEFINITION: task-mono-stack.json
   WEB_CONTAINER_NAME: mono-stack-ecr
-  WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr:${{ github.sha }}
+  WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr:latest
   ECS_CLUSTER: cluster-mono-stack
   ECS_SERVICE: service-mono-stack
   FE_ENV: production
@@ -40,6 +40,9 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           ecr-registry: ${{ env.ECR_REGISTRY }}
 
+      - name: Prune old Docker resources
+        run: sudo docker system prune -f
+          
       - name: Build Web
         id: build-web
         uses: ./.github/actions/build-web
