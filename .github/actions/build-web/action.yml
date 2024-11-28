@@ -18,6 +18,30 @@ runs:
         printenv | grep -E '^(FE_ENV|FE_PORT)' >> apps/web/.env
         cat apps/web/.env
 
+    - name: Stop and remove running containers using the old Web image
+      shell: bash
+      run: |
+        CONTAINER_IDS=$(sudo docker ps -q --filter ancestor=${{ inputs.image }})
+        if [ -n "$CONTAINER_IDS" ]; then
+          echo "Stopping containers using image: ${{ inputs.image }}"
+          sudo docker stop $CONTAINER_IDS
+          echo "Removing containers using image: ${{ inputs.image }}"
+          sudo docker rm $CONTAINER_IDS
+        else
+          echo "No running containers found for image: ${{ inputs.image }}"
+        fi
+
+    - name: Remove old Web image if exists
+      shell: bash
+      run: |
+        if sudo docker images --format '{{.Repository}}:{{.Tag}}' | grep -q "^${{ inputs.image }}$"; then
+          echo "Removing old image: ${{ inputs.image }}"
+          sudo docker rmi -f ${{ inputs.image }}
+        else
+          echo "No old image found for: ${{ inputs.image }}"
+        fi
+
+
     - name: Build Web
       id: build-web
       shell: bash
