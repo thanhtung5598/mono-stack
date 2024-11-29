@@ -40,8 +40,22 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           ecr-registry: ${{ env.ECR_REGISTRY }}
 
+      - name: Stop and remove all running containers
+        run: |
+          docker ps -q | xargs --no-run-if-empty docker stop
+          docker ps -aq | xargs --no-run-if-empty docker rm
+  
+      - name: Remove old Docker images
+        run: |
+          docker images -q | xargs --no-run-if-empty docker rmi -f
+
       - name: Prune old Docker resources
         run: sudo docker system prune -f
+
+      - name: Clean up Docker images and containers
+        run: |
+          sudo docker system prune -af --volumes
+          sudo docker image prune -a -f
 
       - name: Build Web
         id: build-web
