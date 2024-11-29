@@ -42,7 +42,12 @@ jobs:
 
       - name: Prune old Docker resources
         run: sudo docker system prune -f
-          
+        
+      - name: Remove old Docker images
+        run: |
+          # Remove all images not tagged as 'latest'
+          docker images --filter "dangling=true" -q | xargs --no-run-if-empty docker rmi
+
       - name: Build Web
         id: build-web
         uses: ./.github/actions/build-web
