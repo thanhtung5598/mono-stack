@@ -4,7 +4,10 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div className="text-center">Com here next to me</div>
         <div className="text-center">Com here next to me</div>
+        <div className="text-center">Com here next to me</div>
         <div className="text-center">Best nek</div>
+        <div className="text-center">Com here next to me</div>
+        <div className="text-center">Com here next to me</div>
       </main>
     </div>
   );
