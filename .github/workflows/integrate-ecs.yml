@@ -88,7 +88,7 @@ jobs:
           image: "${{ env.WEB_IMAGE }}"
 
       - name: Run migration
-        run: docker run --rm ${{ env.WEB_IMAGE }} --verbose
+        run: sudo docker run --rm ${{ env.WEB_IMAGE }} --verbose
         continue-on-error: true
 
       - name: Deploy to Amazon ECS service
