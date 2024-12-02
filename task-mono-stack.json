@@ -1,9 +1,9 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/task-mono-stack:33",
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/task-mono-stack:34",
   "containerDefinitions": [
     {
       "name": "mono-stack-ecr",
-      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr",
+      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr:latest",
       "cpu": 0,
       "portMappings": [
         {
@@ -16,10 +16,8 @@
       ],
       "essential": true,
       "environment": [],
-      "environmentFiles": [],
       "mountPoints": [],
       "volumesFrom": [],
-      "ulimits": [],
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
@@ -29,8 +27,7 @@
           "max-buffer-size": "25m",
           "awslogs-region": "ap-southeast-1",
           "awslogs-stream-prefix": "ecs"
-        },
-        "secretOptions": []
+        }
       },
       "systemControls": []
     }
@@ -39,7 +36,7 @@
   "taskRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
   "networkMode": "bridge",
-  "revision": 33,
+  "revision": 34,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -65,9 +62,6 @@
       "name": "ecs.capability.execution-role-ecr-pull"
     },
     {
-      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-    },
-    {
       "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
     }
   ],
@@ -80,7 +74,7 @@
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-12-02T03:41:51.953Z",
-  "registeredBy": "arn:aws:iam::739275471493:root",
+  "registeredAt": "2024-12-02T03:47:25.684Z",
+  "registeredBy": "arn:aws:iam::739275471493:user/mono-stack-iam",
   "tags": []
 }
