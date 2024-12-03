@@ -1,13 +1,13 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/task-mono-stack:42",
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/turbo-stack-task:1",
   "containerDefinitions": [
     {
-      "name": "mono-stack-ecr",
-      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr",
+      "name": "turbo-stack-ecr",
+      "image": "739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/turbo-stack-ecr",
       "cpu": 0,
       "portMappings": [
         {
-          "name": "mono-stack-ecr-3000-tcp",
+          "name": "turbo-stack-ecr-3000-tcp",
           "containerPort": 3000,
           "hostPort": 4000,
           "protocol": "tcp",
@@ -23,7 +23,7 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/task-mono-stack",
+          "awslogs-group": "/ecs/turbo-stack-task",
           "mode": "non-blocking",
           "awslogs-create-group": "true",
           "max-buffer-size": "25m",
@@ -35,11 +35,11 @@
       "systemControls": []
     }
   ],
-  "family": "task-mono-stack",
+  "family": "turbo-stack-task",
   "taskRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
   "networkMode": "bridge",
-  "revision": 42,
+  "revision": 1,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -75,12 +75,12 @@
   "compatibilities": ["EC2"],
   "requiresCompatibilities": ["EC2"],
   "cpu": "256",
-  "memory": "768",
+  "memory": "512",
   "runtimePlatform": {
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-12-03T07:23:18.430Z",
+  "registeredAt": "2024-12-03T08:10:16.796Z",
   "registeredBy": "arn:aws:iam::739275471493:root",
   "tags": []
 }

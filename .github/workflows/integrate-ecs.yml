@@ -10,11 +10,11 @@ env:
   AWS_DEPLOY_ACCESS_KEY_ID: ${{ secrets.AWS_DEPLOY_ACCESS_KEY_ID }}
   AWS_DEPLOY_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEPLOY_SECRET_ACCESS_KEY }}
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
-  ECS_TASK_DEFINITION: task-mono-stack.json
+  ECS_TASK_DEFINITION: turbo-stack-task.json
   WEB_CONTAINER_NAME: mono-stack-ecr
   WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/mono-stack-ecr:latest
-  ECS_CLUSTER: cluster-mono-stack
-  ECS_SERVICE: service-mono-stack
+  ECS_CLUSTER: turbo-stack-cluster
+  ECS_SERVICE: turbo-stack-service
   FE_ENV: production
   FE_PORT: ${{ secrets.FE_PORT }}
 
@@ -44,7 +44,7 @@ jobs:
       #   run: |
       #     sudo docker ps -q | xargs --no-run-if-empty sudo docker stop
       #     sudo docker ps -aq | xargs --no-run-if-empty sudo docker rm
-  
+
       # - name: Remove old Docker images
       #   run: |
       #     sudo docker images -q | xargs --no-run-if-empty sudo docker rmi -f
