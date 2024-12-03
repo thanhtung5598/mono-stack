@@ -11,7 +11,7 @@ env:
   AWS_DEPLOY_SECRET_ACCESS_KEY: ${{ secrets.AWS_DEPLOY_SECRET_ACCESS_KEY }}
   ECR_REGISTRY: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com
   ECS_TASK_DEFINITION: turbo-stack-task.json
-  WEB_CONTAINER_NAME: 
+  WEB_CONTAINER_NAME: turbo-stack-ecr
   WEB_IMAGE: 739275471493.dkr.ecr.ap-southeast-1.amazonaws.com/turbo-stack-ecr:latest
   ECS_CLUSTER: turbo-stack-cluster
   ECS_SERVICE: turbo-stack-service
