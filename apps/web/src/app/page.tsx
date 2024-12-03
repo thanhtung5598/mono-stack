@@ -4,6 +4,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         <div className="text-center">The best 1</div>
         <div className="text-center">The best 2</div>
+        <div className="text-center">The best 3</div>
       </main>
     </div>
   );
