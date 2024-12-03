@@ -1,5 +1,5 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/task-mono-stack:39",
+  "taskDefinitionArn": "arn:aws:ecs:ap-southeast-1:739275471493:task-definition/task-mono-stack:42",
   "containerDefinitions": [
     {
       "name": "mono-stack-ecr",
@@ -39,7 +39,7 @@
   "taskRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
   "executionRoleArn": "arn:aws:iam::739275471493:role/ecsTaskExecutionRole",
   "networkMode": "bridge",
-  "revision": 39,
+  "revision": 42,
   "volumes": [],
   "status": "ACTIVE",
   "requiresAttributes": [
@@ -75,12 +75,12 @@
   "compatibilities": ["EC2"],
   "requiresCompatibilities": ["EC2"],
   "cpu": "256",
-  "memory": "256",
+  "memory": "768",
   "runtimePlatform": {
     "cpuArchitecture": "X86_64",
     "operatingSystemFamily": "LINUX"
   },
-  "registeredAt": "2024-12-02T06:43:49.037Z",
+  "registeredAt": "2024-12-03T07:23:18.430Z",
   "registeredBy": "arn:aws:iam::739275471493:root",
   "tags": []
 }
