@@ -6,7 +6,7 @@ export default function Home() {
         <div className="text-center">The Mew 2</div>
         <div className="text-center">The Mew 3</div>
         <div className="text-center">The Mew 4</div>
-        <div className="text-center">The Mew 5</div>
+        <div className="text-center">Baby 5</div>
       </main>
     </div>
   );
