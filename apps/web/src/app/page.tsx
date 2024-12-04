@@ -5,6 +5,8 @@ export default function Home() {
         <div className="text-center">The best 1</div>
         <div className="text-center">The best 2</div>
         <div className="text-center">The best 3</div>
+        <div className="text-center">The best 4</div>
+        <div className="text-center">The best 5</div>
       </main>
     </div>
   );

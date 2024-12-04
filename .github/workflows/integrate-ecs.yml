@@ -40,23 +40,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           ecr-registry: ${{ env.ECR_REGISTRY }}
 
-      # - name: Stop and remove all running containers
-      #   run: |
-      #     sudo docker ps -q | xargs --no-run-if-empty sudo docker stop
-      #     sudo docker ps -aq | xargs --no-run-if-empty sudo docker rm
-
-      # - name: Remove old Docker images
-      #   run: |
-      #     sudo docker images -q | xargs --no-run-if-empty sudo docker rmi -f
-
-      # - name: Prune old Docker resources
-      #   run: sudo docker system prune -f
-
-      # - name: Clean up Docker images and containers
-      #   run: |
-      #     sudo docker system prune -af --volumes
-      #     sudo docker image prune -a -f
-
       - name: Build Web
         id: build-web
         uses: ./.github/actions/build-web
@@ -86,10 +69,6 @@ jobs:
           task-definition: ${{ env.ECS_TASK_DEFINITION }}
           container-name: ${{ env.WEB_CONTAINER_NAME }}
           image: "${{ env.WEB_IMAGE }}"
-
-      - name: Run migration
-        run: sudo docker run --rm ${{ env.WEB_IMAGE }} --verbose
-        continue-on-error: true
 
       - name: Deploy to Amazon ECS service
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
