@@ -45,6 +45,13 @@ jobs:
             --service ${{ env.ECS_SERVICE }} \
             --desired-count 0
 
+      - name: Remove ECR Image ${{ env.WEB_IMAGE }}
+        id: remove-image
+        uses: aws-actions/amazon-ecr-remove-image@v1
+        with:
+          image: ${{ env.WEB_IMAGE }}
+          force: true
+
   build-web:
     name: Build Web
     runs-on: self-hosted
@@ -100,7 +107,7 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-      
+
       - name: Start ECS Service Tasks
         run: |
           aws ecs update-service \
