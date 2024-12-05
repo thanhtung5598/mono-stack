@@ -26,7 +26,6 @@ jobs:
   stop-service:
     name: Stop ECS Service
     runs-on: self-hosted
-    continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -45,13 +44,6 @@ jobs:
             --cluster ${{ env.ECS_CLUSTER }} \
             --service ${{ env.ECS_SERVICE }} \
             --desired-count 0
-
-      - name: Remove ECR Image ${{ env.WEB_IMAGE }}
-        id: remove-image
-        uses: aws-actions/amazon-ecr-remove-image@v1
-        with:
-          image: ${{ env.WEB_IMAGE }}
-          force: true
 
   build-web:
     name: Build Web
