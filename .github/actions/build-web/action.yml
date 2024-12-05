@@ -18,6 +18,12 @@ runs:
         printenv | grep -E '^(FE_ENV|FE_PORT)' >> apps/web/.env
         cat apps/web/.env
 
+    - name: Docker Remove Image
+      id: docker-remove-image
+      shell: bash
+      run: |
+        sudo docker rmi ${{ inputs.image }} || true
+
     - name: Build Web
       id: build-web
       shell: bash
