@@ -28,7 +28,8 @@ runs:
       id: docker-prune
       shell: bash
       run: |
-        sudo docker system prune -a --volumes -f
+        sudo docker builder prune -f
+        sudo docker builder prune --all -f
 
     - name: Build Web
       id: build-web
