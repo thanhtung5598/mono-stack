@@ -48,9 +48,8 @@ jobs:
       - name: Remove ECR Image
         run: |
           aws ecr batch-delete-image \
-          --repository-name ${{ env.ECR_REGISTRY }} \
-          --image-ids imageTag=${{ env.WEB_IMAGE }} \
-          --force
+            --repository-name turbo-stack-ecr \
+            --image-ids imageTag=latest
 
   build-web:
     name: Build Web
