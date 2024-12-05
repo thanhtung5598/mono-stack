@@ -48,7 +48,7 @@ jobs:
       - name: Remove ECR Image
         run: |
           aws ecr batch-delete-image \
-          --registry-id ${{ env.ECR_REGISTRY }} \
+          --repository-name ${{ env.ECR_REGISTRY }} \
           --image-ids imageTag=${{ env.WEB_IMAGE }} \
           --force
 
