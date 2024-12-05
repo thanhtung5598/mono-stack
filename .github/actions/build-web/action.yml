@@ -23,6 +23,7 @@ runs:
       shell: bash
       run: |
         sudo docker rmi ${{ inputs.image }} || true
+        sudo docker image prune -f
 
     - name: Build Web
       id: build-web
