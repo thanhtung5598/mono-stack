@@ -5,6 +5,8 @@ export default function Home() {
         <div className="text-center">Berk 1</div>
         <div className="text-center">Berk 2</div>
         <div className="text-center">Berk 3</div>
+        <div className="text-center">Berk 4</div>
+        <div className="text-center">Berk 5</div>
       </main>
     </div>
   );

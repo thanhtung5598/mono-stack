@@ -24,6 +24,12 @@ runs:
       run: |
         sudo docker rmi -f ${{ inputs.image }} || true
 
+    - name: Docker prune force
+      id: docker-prune
+      shell: bash
+      run: |
+        sudo docker system prune -a --volumes -f
+
     - name: Build Web
       id: build-web
       shell: bash
