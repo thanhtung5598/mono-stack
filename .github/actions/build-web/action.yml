@@ -22,8 +22,7 @@ runs:
       id: docker-remove-image
       shell: bash
       run: |
-        sudo docker rmi ${{ inputs.image }} || true
-        sudo docker image prune -f
+        sudo docker rmi -f ${{ inputs.image }} || true
 
     - name: Build Web
       id: build-web
