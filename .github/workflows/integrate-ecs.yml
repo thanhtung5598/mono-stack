@@ -45,6 +45,13 @@ jobs:
             --service ${{ env.ECS_SERVICE }} \
             --desired-count 0
 
+      - name: Remove ECR Image
+        run: |
+          aws ecr batch-delete-image \
+          --registry-id ${{ env.ECR_REGISTRY }} \
+          --image-ids imageTag=${{ env.WEB_IMAGE }} \
+          --force
+
   build-web:
     name: Build Web
     runs-on: self-hosted
