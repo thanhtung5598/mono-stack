@@ -45,6 +45,12 @@ jobs:
             --service ${{ env.ECS_SERVICE }} \
             --desired-count 0
 
+      - name: Remove ECR Image
+        run: |
+          aws ecr batch-delete-image \
+            --repository-name turbo-stack-ecr \
+            --image-ids imageTag=latest
+
   build-web:
     name: Build Web
     runs-on: self-hosted
