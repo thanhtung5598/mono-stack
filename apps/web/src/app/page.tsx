@@ -5,6 +5,9 @@ export default function Home() {
         <div className="text-center">Bell 1</div>
         <div className="text-center">Bell 2</div>
         <div className="text-center">Bell 3</div>
+        <div className="text-center">Bell 4</div>
+        <div className="text-center">Bell 5</div>
+        <div className="text-center">Bell 6</div>
         <div className="text-center">Want testing</div>
       </main>
     </div>
